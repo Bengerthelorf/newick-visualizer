@@ -1,0 +1,4 @@
+include README.md
+recursive-include newick_visualizer/templates *
+recursive-include newick_visualizer/templates/styles *.css
+recursive-include newick_visualizer/templates/scripts *.js

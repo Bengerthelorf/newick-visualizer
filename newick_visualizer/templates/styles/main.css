@@ -1,0 +1,77 @@
+/* 基础布局样式 */
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+/* 树容器 */
+#tree-container {
+    width: 1000px;
+    height: 1000px;
+    position: relative;
+}
+
+/* 分组背景 */
+.group-background {
+    fill-rule: evenodd;
+    pointer-events: none;
+}
+
+/* 图例样式 */
+.legend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+/* 节点标签样式 */
+/* .node-label {
+} */
+
+.node-label.direction-right {
+    text-anchor: start;
+    dominant-baseline: middle;
+}
+
+.node-label.direction-left {
+    text-anchor: end;
+    dominant-baseline: middle;
+}
+
+.node-label.direction-down {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+.node-label.direction-up {
+    text-anchor: middle;
+    dominant-baseline: alphabetic;
+}
+
+/* 可信度值样式 - 只有在showConfidence=true时才显示 */
+.confidence-value {
+    font-size: 10px;
+    fill: #666;
+}

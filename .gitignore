@@ -1,0 +1,12 @@
+# pycache
+__pycache__/
+*.pyc
+
+# vscode
+.vscode/
+
+# python(.egg-info)
+*.egg-info/
+
+# hidden files
+.DS_Store
