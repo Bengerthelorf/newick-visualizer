@@ -7,6 +7,7 @@ __pycache__/
 
 # python(.egg-info)
 *.egg-info/
+dist/
 
 # hidden files
 .DS_Store
