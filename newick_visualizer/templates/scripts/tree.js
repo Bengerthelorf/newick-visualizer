@@ -2,10 +2,23 @@
 function createTree(data) {
     const {width, height, padding, treeLayout} = initializeTreeLayout();
     
+    // 根据方向调整 viewBox
+    let viewBoxParams;
+    switch (treeDirection) {
+        case 'left':
+        case 'right':
+            viewBoxParams = [-padding, -padding, width, height];
+            break;
+        case 'up':
+        case 'down':
+            viewBoxParams = [-padding, -padding, width, height];
+            break;
+    }
+    
     // 创建SVG容器
     const svg = d3.select("#tree-container")
         .append("svg")
-        .attr("viewBox", [-padding, -padding, width, height])
+        .attr("viewBox", viewBoxParams.join(" "))
         .style("width", "100%")
         .style("height", "100%");
 
@@ -38,27 +51,6 @@ function createTree(data) {
 }
 
 // // 绘制连接线
-// function drawLinks(layer, data) {
-//     const linkGenerator = d3.linkHorizontal()
-//         .x(d => d[0])
-//         .y(d => d[1]);
-
-//     layer.selectAll("path")
-//         .data(data.links())
-//         .join("path")
-//         .attr("d", d => {
-//             const source = transformCoordinates(d.source.x, d.source.y);
-//             const target = transformCoordinates(d.target.x, d.target.y);
-//             const midX = (source[0] + target[0]) / 2;
-            
-//             return `M${source[0]},${source[1]}
-//                     C${midX},${source[1]}
-//                      ${midX},${target[1]}
-//                      ${target[0]},${target[1]}`;
-//         });
-// }
-
-// 修改 drawLinks 函数
 function drawLinks(layer, data) {
     layer.selectAll("path")
         .data(data.links())
@@ -66,12 +58,21 @@ function drawLinks(layer, data) {
         .attr("d", d => {
             const source = transformCoordinates(d.source.x, d.source.y);
             const target = transformCoordinates(d.target.x, d.target.y);
-            const midX = (source[0] + target[0]) / 2;
             
-            return `M${source[0]},${source[1]}
-                    C${midX},${source[1]}
-                     ${midX},${target[1]}
-                     ${target[0]},${target[1]}`;
+            // 根据方向使用不同的曲线绘制方式
+            if (treeDirection === 'up' || treeDirection === 'down') {
+                const midY = (source[1] + target[1]) / 2;
+                return `M${source[0]},${source[1]}
+                        C${source[0]},${midY}
+                         ${target[0]},${midY}
+                         ${target[0]},${target[1]}`;
+            } else {
+                const midX = (source[0] + target[0]) / 2;
+                return `M${source[0]},${source[1]}
+                        C${midX},${source[1]}
+                         ${midX},${target[1]}
+                         ${target[0]},${target[1]}`;
+            }
         });
 }
 

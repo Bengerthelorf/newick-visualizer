@@ -126,18 +126,39 @@ function parseNewick(s) {
 
 // 坐标转换函数
 function transformCoordinates(x, y) {
+    const width = 1000;
+    const height = 1000;
+    const padding = 120;
+    
     switch (treeDirection) {
         case 'left':
-            return [-y, x];
+            return [padding + (height - 2 * padding - y), x];
         case 'up':
-            return [x, -y];
+            return [x, padding + (height - 2 * padding - y)];
         case 'down':
-            return [x, y];
+            return [x, padding + y];
         case 'right':
         default:
-            return [y, x];
+            return [padding + y, x];
     }
 }
+
+
+// 在 wrappedLayout 函数中修改节点位置调整逻辑
+function adjustNodePositions(node, parent, length) {
+    switch (treeDirection) {
+        case 'left':
+            return { x: node.x, y: parent.y - length }; // 向左生长
+        case 'up':
+            return { x: node.x, y: parent.y - length }; // 向上生长
+        case 'down':
+            return { x: node.x, y: parent.y + length }; // 向下生长
+        case 'right':
+        default:
+            return { x: node.x, y: parent.y + length }; // 向右生长
+    }
+}
+
 
 // // 初始化树布局
 function initializeTreeLayout() {
@@ -152,44 +173,62 @@ function initializeTreeLayout() {
         default: 100
     };
 
-    console.log('Branch length config:', branchLengthConfig);  // 调试输出
+    // 计算实际可用的布局空间
+    const availableWidth = width - 2 * padding;
+    const availableHeight = height - 2 * padding;
     
-    // 创建一个基于可信度的长度缩放函数
-    const confidenceScale = d3.scaleLinear()
-        .domain([0, 1])
-        .range([branchLengthConfig.min, branchLengthConfig.max]);
+    // 根据方向设置布局尺寸
+    let layoutWidth, layoutHeight;
+    
+    // 水平和垂直方向使用相同的布局尺寸
+    if (treeDirection === 'up' || treeDirection === 'down') {
+        layoutWidth = availableWidth;
+        layoutHeight = availableHeight;
+    } else {
+        layoutWidth = availableHeight;  // 交换宽高
+        layoutHeight = availableWidth;
+    }
 
-    // 自定义树布局
+    // 创建树布局
     const treeLayout = d3.tree()
-        .size([height - 2 * padding, width - 2 * padding])
+        .size([layoutWidth, layoutHeight])
         .separation((a, b) => {
             const aOrder = nodeOrderMap.get(a.data.name);
             const bOrder = nodeOrderMap.get(b.data.name);
             return aOrder && bOrder && aOrder.groupIndex === bOrder.groupIndex ? 1 : 2;
         });
 
-    // 包装树布局以添加基于可信度的长度调整
+    // 创建缩放函数
+    const confidenceScale = d3.scaleLinear()
+        .domain([0, 1])
+        .range([branchLengthConfig.min, branchLengthConfig.max]);
+
     const wrappedLayout = function(root) {
-        // 先应用原始布局
         const tree = treeLayout(root);
         
-        // 调整每个节点的位置
+        // 调整节点位置
         tree.each(node => {
             if (node.parent) {
-                // 使用可信度值或默认长度
                 const length = node.data.confidence !== undefined ?
                     confidenceScale(node.data.confidence) :
                     branchLengthConfig.default;
                 
-                // 根据树的方向调整位置
-                if (treeDirection === 'right') {
-                    node.y = node.parent.y + length;
-                } else if (treeDirection === 'left') {
-                    node.y = node.parent.y - length;
-                } else if (treeDirection === 'down') {
-                    node.x = node.parent.x + length;
-                } else if (treeDirection === 'up') {
-                    node.x = node.parent.x - length;
+                // 根据方向调整距离
+                const adjustedLength = length;
+                
+                switch (treeDirection) {
+                    case 'left':
+                        node.y = node.parent.y - adjustedLength;
+                        break;
+                    case 'up':
+                        node.y = node.parent.y - adjustedLength;
+                        break;
+                    case 'down':
+                        node.y = node.parent.y + adjustedLength;
+                        break;
+                    case 'right':
+                    default:
+                        node.y = node.parent.y + adjustedLength;
                 }
             }
         });
