@@ -30,7 +30,7 @@ class TemplateManager:
             js_config = {
                 "padding": config['padding'],
                 "opacity": config['opacity'],
-                "pointsPerNode": config['points'],  # 注意这里改用pointsPerNode
+                "pointsPerNode": config['points'],
                 "distanceThreshold": config['distance_threshold'],
                 "showConfidence": bool(config['show_confidence']),
                 "fontSize": config['font_size'],

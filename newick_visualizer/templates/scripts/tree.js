@@ -112,7 +112,7 @@ function drawNodes(layer, data) {
         .style("font-weight", d => {
             const order = nodeOrderMap.get(d.data.name);
             // 如果是分组中的节点，使用配置的font-weight，否则使用normal
-            return order ? CONFIG.fontWeight : "normal";
+            // return order ? CONFIG.fontWeight : "normal";
         })
         .text(d => {
             // 如果节点名称是数字（可信度值）
