@@ -37,6 +37,8 @@ newick-viz input.nwk groups.json \
 - `--font-family`: Font family for labels [default: Arial, sans-serif]
 - `--font-weight`: Font weight [default: normal]
 - `--show-confidence`: Show confidence values
+- `--link-color`: Color of the connecting lines [default: #999999]
+- `--link-width`: Width of the connecting lines [default: 1.5]
 
 For a complete list of options:
 

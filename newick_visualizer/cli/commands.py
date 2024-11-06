@@ -77,6 +77,13 @@ CONTEXT_SETTINGS = {
               show_default=True,
               type=float,
               help='Default length for branches without confidence values.')
+# 连接线相关选项
+@click.option('--link-color', 
+              default='#999999', 
+              help='Color of the connecting lines')
+@click.option('--link-width', 
+              default=1.5, 
+              help='Width of the connecting lines')
 # 可视化选项
 @click.option('--show-confidence',
               is_flag=True,

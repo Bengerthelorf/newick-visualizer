@@ -141,6 +141,8 @@ class TreeGenerator:
             'min_branch_length': self.config['min_branch_length'],
             'max_branch_length': self.config['max_branch_length'],
             'default_length': self.config['default_length'],
+            'link_color': self.config['link_color'],
+            'link_width': self.config['link_width'],
         }
 
     def _generate_html(

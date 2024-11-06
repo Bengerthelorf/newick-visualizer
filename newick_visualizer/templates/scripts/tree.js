@@ -28,9 +28,9 @@ function createTree(data) {
     // 创建连接线层
     const linksLayer = svg.append("g")
         .attr("fill", "none")
-        .attr("stroke", "#999")
+        .attr("stroke", CONFIG.linkColor || "#999")
         .attr("stroke-opacity", 0.4)
-        .attr("stroke-width", 1.5);
+        .attr("stroke-width", CONFIG.linkWidth || 1.5);
         
     // 创建节点层
     const nodesLayer = svg.append("g");

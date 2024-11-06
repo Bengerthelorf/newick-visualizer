@@ -40,7 +40,9 @@ class TemplateManager:
                     "min": float(config['min_branch_length']),
                     "max": float(config['max_branch_length']),
                     "default": float(config['default_length'])
-                }
+                },
+                "linkColor": config['link_color'],
+                "linkWidth": float(config['link_width'])
             }
 
             # 替换内容

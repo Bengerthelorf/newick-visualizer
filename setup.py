@@ -1,8 +1,14 @@
 from setuptools import setup, find_packages
+import os
+
+# 读取 _version.py 中的 __version__ 变量
+version = {}
+with open(os.path.join("newick_visualizer", "_version.py")) as fp:
+    exec(fp.read(), version)
 
 setup(
     name="newick-visualizer",
-    version="1.0.4",
+    version=version["__version__"],
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -13,7 +19,6 @@ setup(
             'newick-viz=newick_visualizer.cli.commands:main',
         ],
     },
-    # 明确指定包含的数据文件
     package_data={
         'newick_visualizer': [
             'templates/base.html',
