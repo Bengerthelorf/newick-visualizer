@@ -73,6 +73,49 @@ body {
     fill: #666;
 }
 
+/* 控制按钮容器 */
+#controls-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+/* 控制按钮样式 */
+.control-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.control-button:hover:not(:disabled) {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+.control-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.control-button svg {
+    width: 16px;
+    height: 16px;
+}
+
 /* 拖动相关样式 */
 g.dragging circle {
     fill: #ff4444;

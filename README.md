@@ -62,6 +62,14 @@ newick-viz input.nwk groups.json \
 - Visual feedback during dragging (node highlight and size change)
 - Changes persist in the visualization
 
+#### Undo Function
+
+- Undo button available in the top-left corner
+- Reverts the last node movement
+- Multiple levels of undo supported
+- Visual feedback when undo is available/unavailable
+- Keyboard shortcut support (Ctrl/Cmd + Z)
+
 #### Hover Effects
 
 - Nodes enlarge slightly on hover

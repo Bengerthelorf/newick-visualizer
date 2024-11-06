@@ -1,5 +1,61 @@
+// 历史记录管理
+class History {
+    constructor(initialData) {
+        this.states = [this.deepCloneData(initialData)];
+        this.currentIndex = 0;
+        this.updateUndoButton();
+    }
+
+    // 深度克隆树数据
+    deepCloneData(data) {
+        return {
+            x: data.x,
+            y: data.y,
+            children: data.children ? data.children.map(child => this.deepCloneData(child)) : null,
+            data: { ...data.data },
+            parent: null  // 不克隆父节点引用，避免循环引用
+        };
+    }
+
+    // 保存新状态
+    saveState(data) {
+        // 移除当前状态之后的所有状态
+        this.states.splice(this.currentIndex + 1);
+        // 添加新状态
+        this.states.push(this.deepCloneData(data));
+        this.currentIndex++;
+        this.updateUndoButton();
+    }
+
+    // 撤销到上一步
+    undo() {
+        if (this.canUndo()) {
+            this.currentIndex--;
+            this.updateUndoButton();
+            return this.deepCloneData(this.states[this.currentIndex]);
+        }
+        return null;
+    }
+
+    // 检查是否可以撤销
+    canUndo() {
+        return this.currentIndex > 0;
+    }
+
+    // 更新撤销按钮状态
+    updateUndoButton() {
+        const undoButton = document.getElementById('undo-button');
+        if (undoButton) {
+            undoButton.disabled = !this.canUndo();
+        }
+    }
+}
+
 // 主要的树渲染函数
 function createTree(data) {
+    // 初始化历史记录
+    const history = new History(data);
+    
     const {width, height, padding, treeLayout} = initializeTreeLayout();
     
     // 根据方向调整 viewBox
@@ -54,6 +110,43 @@ function createTree(data) {
     // 画图例
     createLegend();
     
+    // 设置撤销按钮事件
+    d3.select('#undo-button').on('click', () => {
+        const previousState = history.undo();
+        if (previousState) {
+            // 更新数据
+            updateTreeFromState(previousState);
+        }
+    });
+
+    // 更新整个树的状态
+    function updateTreeFromState(state) {
+        // 递归更新所有节点的位置
+        function updateNodePositions(node, stateNode) {
+            node.x = stateNode.x;
+            node.y = stateNode.y;
+            if (node.children && stateNode.children) {
+                node.children.forEach((child, i) => {
+                    updateNodePositions(child, stateNode.children[i]);
+                });
+            }
+        }
+
+        updateNodePositions(data, state);
+
+        // 更新视图
+        nodes.attr("transform", d => {
+            const [x, y] = transformCoordinates(d.x, d.y);
+            return `translate(${x},${y})`;
+        });
+
+        // 更新连接线
+        updateLinks();
+        
+        // 更新分组背景
+        updateGroupBackgrounds();
+    }
+    
     // 拖动开始函数
     function dragstarted(event, d) {
         d3.select(this).classed("dragging", true);
@@ -62,10 +155,8 @@ function createTree(data) {
 
     // 拖动中函数
     function dragged(event, d) {
-        // 获取当前坐标
         const [x, y] = d3.pointer(event, svg.node());
         
-        // 更新节点位置
         if (treeDirection === 'right' || treeDirection === 'left') {
             d.x = y;
             d.y = x - padding;
@@ -74,20 +165,18 @@ function createTree(data) {
             d.y = y - padding;
         }
         
-        // 更新节点位置
         d3.select(this)
             .attr("transform", `translate(${x},${y})`);
 
-        // 更新连接到此节点的线
         updateLinks();
-        
-        // 更新分组背景
         updateGroupBackgrounds();
     }
 
     // 拖动结束函数
     function dragended(event, d) {
         d3.select(this).classed("dragging", false);
+        // 保存当前状态到历史记录
+        history.saveState(data);
     }
 
     // 更新连接线的函数
