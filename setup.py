@@ -13,6 +13,10 @@ setup(
     include_package_data=True,
     install_requires=[
         'click>=8.0.0',
+        'selenium>=4.0.0',
+        'Pillow>=8.0.0',
+        'imgkit>=1.2.0',
+        'pdfkit>=1.0.0'
     ],
     entry_points={
         'console_scripts': [

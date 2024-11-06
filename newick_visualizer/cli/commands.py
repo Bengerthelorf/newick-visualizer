@@ -88,6 +88,10 @@ CONTEXT_SETTINGS = {
 @click.option('--show-confidence',
               is_flag=True,
               help='Show confidence values on the tree.')
+# 输出格式选项
+@click.option('--render-delay', default=2000, 
+              help='Delay in milliseconds before capturing output (for PDF/image formats)')
+
 def cli(input_file, groups_file, **kwargs):
     """Newick Tree Visualizer
 

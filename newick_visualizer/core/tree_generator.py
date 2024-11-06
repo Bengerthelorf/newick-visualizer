@@ -1,5 +1,6 @@
 from typing import Dict, Any
 import json
+import os
 from pathlib import Path
 
 from .utils import (
@@ -9,7 +10,8 @@ from .utils import (
     process_colors,
     validate_file_path,
     load_json_file,
-    save_to_file
+    save_to_file,
+    export_visualization
 )
 from .template_manager import TemplateManager
 
@@ -26,7 +28,7 @@ class TreeGenerator:
         self.template_manager = TemplateManager()
 
     def generate(self) -> str:
-        """生成树的可视化HTML
+        """生成树的可视化
         
         Returns:
             str: 生成的HTML内容
@@ -53,6 +55,16 @@ class TreeGenerator:
                 processed_newick,
                 processed_groups,
                 render_config
+            )
+
+            # 使用 export_visualization 处理输出
+            output_file = self.config.get('output', 'tree_visualization.html')
+            render_delay = self.config.get('render_delay', 2000)
+            export_visualization(
+                html_content=html_content,
+                output_path=output_file,
+                output_type=None,  # 让函数自动判断类型
+                render_delay=render_delay
             )
             
             return html_content
@@ -176,33 +188,15 @@ class TreeGenerator:
         save_to_file(content, self.config['output_file'])
 
 def create_tree_html(**kwargs) -> None:
-    """创建树的可视化HTML
+    """创建树的可视化
     
     Args:
         **kwargs: 配置参数
     """
     try:
-        # 添加调试输出
         print("Starting tree generation with config:", json.dumps(kwargs, indent=2))
-        
         generator = TreeGenerator(kwargs)
-        
-        # 获取生成的HTML内容
-        html_content = generator.generate()
-        
-        # 输出生成的HTML内容的前100个字符（用于调试）
-        print("Generated HTML preview:", html_content[:100])
-        
-        # 检查输出文件
-        output_file = kwargs.get('output_file', 'tree_visualization.html')
-        print(f"Writing to file: {output_file}")
-        
-        # 保存文件
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(html_content)
-            
-        print("Tree generation completed successfully")
-        
+        generator.generate()
     except Exception as e:
         print(f"Error during tree generation: {str(e)}")
         raise

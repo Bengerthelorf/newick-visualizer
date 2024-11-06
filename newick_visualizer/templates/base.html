@@ -8,6 +8,7 @@ STYLE_CONTENT
     </style>
 </head>
 <body>
+    <div id="loading">Loading visualization...</div>
     <div id="controls-container">
         <button id="undo-button" class="control-button" disabled>
             <svg viewBox="0 0 24 24" width="24" height="24">
@@ -27,8 +28,23 @@ STYLE_CONTENT
 
         // Newick format data
         const newickData = NEWICK_CONTENT;
-        
+
+        // 设置文档格式
+        document.documentElement.setAttribute('data-format', 'FORMAT_PLACEHOLDER');
+
 SCRIPT_CONTENT
+
+        // Add rendering complete handler
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const tree = document.getElementById('tree-container');
+                const loading = document.getElementById('loading');
+                tree.classList.add('loaded');
+                loading.style.display = 'none';
+                // Add a flag to indicate rendering is complete
+                window.renderedComplete = true;
+            }, 1000);
+        });
     </script>
 </body>
 </html>

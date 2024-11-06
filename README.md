@@ -2,93 +2,153 @@
 
 A tool for creating interactive visualizations of phylogenetic trees in Newick format.
 
-## Features
+## ✨ Features
 
-- Interactive visualization of phylogenetic trees
-- Support for multiple layout directions (right, left, up, down)
-- Configurable node and branch styling
-- Custom grouping and coloring of nodes
-- Draggable nodes for manual layout adjustments
-- Automatic confidence value display
-- Interactive hover effects
-- Customizable connecting lines
+- 🌳 Interactive visualization of phylogenetic trees
+- 🎨 Configurable node and branch styling
+- 🎯 Custom grouping and coloring of nodes
+- 📐 Multiple layout directions (right, left, up, down)
+- 🔄 Draggable nodes for manual layout adjustments
+- 💾 Multiple export formats (HTML, PNG, JPG, PDF)
+- ⚡️ Support for large-scale trees
+- 🎯 Optional confidence values display
 
-## Installation
+## 📦 Installation
 
-You can install newick-visualizer using pip:
+### System Dependencies
+
+Google Chrome is required:
+
+```bash
+# macOS
+brew install --cask google-chrome
+
+# Ubuntu
+sudo apt-get update
+sudo apt-get install google-chrome-stable
+
+# CentOS
+sudo yum install google-chrome-stable
+```
+
+### Python Package
 
 ```bash
 pip install newick-visualizer
 ```
 
-## Usage
+## 🚀 Quick Start
 
-Basic usage:
+### Basic Usage
 
 ```bash
-newick-viz input.nwk groups.json
+newick-viz input.nwk groups.json -o output.html
 ```
 
-With options:
+### Example with Options
 
 ```bash
 newick-viz input.nwk groups.json \
-    --output output.html \
-    --font-size 14 \
-    --link-color "#336699" \
-    --link-width 2.0 \
-    --show-confidence
+    -o output.jpg \
+    --padding 21 \
+    --points 8 \
+    --distance-threshold 1.5 \
+    --min-branch-length 35 \
+    --default-length 60 \
+    --max-branch-length 80 \
+    --opacity 0.6 \
+    --font-size 13 \
+    --font-weight bold \
+    --link-width 3.0 \
+    --link-color '#f7cc4f' \
+    --render-delay 2000
 ```
 
-### Options
+### Export Formats
 
-- `-o, --output`: Output HTML file path [default: tree_visualization.html]
-- `--padding`: Padding around nodes in pixels [default: 35]
-- `--opacity`: Opacity of group backgrounds (0-1) [default: 0.3]
-- `--points`: Number of points around each node [6-24] [default: 12]
-- `--font-size`: Font size in pixels [default: 12]
-- `--font-family`: Font family for labels [default: Arial, sans-serif]
-- `--font-weight`: Font weight [default: normal]
-- `--show-confidence`: Show confidence values
-- `--link-color`: Color of connecting lines [default: #999999]
-- `--link-width`: Width of connecting lines in pixels [default: 1.5]
+Supports multiple output formats:
 
-### Interactive Features
+```bash
+# Interactive HTML
+newick-viz input.nwk groups.json -o tree.html
 
-#### Node Dragging
+# Static Images
+newick-viz input.nwk groups.json -o tree.jpg
+newick-viz input.nwk groups.json -o tree.png
+
+# PDF Document
+newick-viz input.nwk groups.json -o tree.pdf
+```
+
+## 🎮 Interactive Features
+
+### 🖱️ Node Dragging
 
 - Click and drag any node to manually adjust its position
 - Connected lines and group backgrounds will update automatically
 - Visual feedback during dragging (node highlight and size change)
 - Changes persist in the visualization
 
-#### Undo Function
+### ↩️ Undo Function
 
 - Undo button available in the top-left corner
 - Reverts the last node movement
 - Multiple levels of undo supported
 - Visual feedback when undo is available/unavailable
-- Keyboard shortcut support (Ctrl/Cmd + Z)
+- Keyboard shortcut support (⌃/⌘ + Z)
 
-#### Hover Effects
+### ✨ Hover Effects
 
 - Nodes enlarge slightly on hover
 - Labels become more prominent
 - Smooth transitions for all visual changes
 
-## Input Files
+## 🛠️ Configuration Options
+
+### Basic Options
+
+- `-o, --output`: Output file path [default: tree_visualization.html]
+- `--render-delay`: Rendering delay in milliseconds [default: 2000]
+
+### Visual Style
+
+- `--padding`: Padding around nodes in pixels [default: 35]
+- `--opacity`: Opacity of group backgrounds (0-1) [default: 0.3]
+- `--points`: Number of points around each node [range: 6-24] [default: 12]
+- `--distance-threshold`: Distance threshold for group backgrounds [default: 1.2]
+
+### Font Settings
+
+- `--font-size`: Font size in pixels [default: 12]
+- `--font-family`: Font family [default: "Arial, sans-serif"]
+- `--font-weight`: Font weight [default: "normal"]
+
+### Branch Settings
+
+- `--min-branch-length`: Minimum branch length [default: 30]
+- `--max-branch-length`: Maximum branch length [default: 70]
+- `--default-length`: Default length when no confidence value [default: 40]
+
+### Connection Line Style
+
+- `--link-color`: Color of connecting lines [default: "#999999"]
+- `--link-width`: Width of connecting lines [default: 1.5]
+
+### Other Settings
+
+- `--show-confidence`: Show confidence values [flag]
+
+## 📝 Input File Formats
 
 ### Newick File
 
-The input Newick file should be in standard Newick format. Example:
+Uses standard Newick format, for example:
 
 ```plaintext
 ((A:0.1,B:0.2)0.95:0.3,C:0.4);
 ```
 
-### Groups JSON File
-
-The groups configuration file should be in JSON format. Example:
+### Groups Configuration File (JSON)
 
 ```json
 {
@@ -111,9 +171,7 @@ The groups configuration file should be in JSON format. Example:
 }
 ```
 
-## Development
-
-For development installation:
+## 🔧 Development Installation
 
 ```bash
 git clone https://github.com/Bengerthelorf/newick-visualizer.git
@@ -147,16 +205,21 @@ pip install -e .
 └── setup.py
 ```
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [D3.js](https://d3js.org/) - Visualization library
+- [Selenium](https://www.selenium.dev/) - Automated export generation
