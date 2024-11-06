@@ -35,18 +35,90 @@ function createTree(data) {
     // 创建节点层
     const nodesLayer = svg.append("g");
 
+    // 创建拖动行为
+    const drag = d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
+
     // 画背景
     drawGroupBackgrounds(groupsLayer, data);
     
     // 画连接线
-    drawLinks(linksLayer, data);
+    const links = drawLinks(linksLayer, data);
     
-    // 画节点
-    drawNodes(nodesLayer, data);
+    // 画节点并应用拖动
+    const nodes = drawNodes(nodesLayer, data);
+    nodes.call(drag);
     
     // 画图例
     createLegend();
     
+    // 拖动开始函数
+    function dragstarted(event, d) {
+        d3.select(this).classed("dragging", true);
+        event.sourceEvent.stopPropagation();
+    }
+
+    // 拖动中函数
+    function dragged(event, d) {
+        // 获取当前坐标
+        const [x, y] = d3.pointer(event, svg.node());
+        
+        // 更新节点位置
+        if (treeDirection === 'right' || treeDirection === 'left') {
+            d.x = y;
+            d.y = x - padding;
+        } else {
+            d.x = x;
+            d.y = y - padding;
+        }
+        
+        // 更新节点位置
+        d3.select(this)
+            .attr("transform", `translate(${x},${y})`);
+
+        // 更新连接到此节点的线
+        updateLinks();
+        
+        // 更新分组背景
+        updateGroupBackgrounds();
+    }
+
+    // 拖动结束函数
+    function dragended(event, d) {
+        d3.select(this).classed("dragging", false);
+    }
+
+    // 更新连接线的函数
+    function updateLinks() {
+        linksLayer.selectAll("path")
+            .attr("d", d => {
+                const source = transformCoordinates(d.source.x, d.source.y);
+                const target = transformCoordinates(d.target.x, d.target.y);
+                
+                if (treeDirection === 'up' || treeDirection === 'down') {
+                    const midY = (source[1] + target[1]) / 2;
+                    return `M${source[0]},${source[1]}
+                            C${source[0]},${midY}
+                             ${target[0]},${midY}
+                             ${target[0]},${target[1]}`;
+                } else {
+                    const midX = (source[0] + target[0]) / 2;
+                    return `M${source[0]},${source[1]}
+                            C${midX},${source[1]}
+                             ${midX},${target[1]}
+                             ${target[0]},${target[1]}`;
+                }
+            });
+    }
+
+    // 更新分组背景的函数
+    function updateGroupBackgrounds() {
+        groupsLayer.selectAll("path.group-background").remove();
+        drawGroupBackgrounds(groupsLayer, data);
+    }
+
     return svg.node();
 }
 
@@ -164,31 +236,39 @@ function drawNodes(layer, data) {
 // 添加节点交互效果
 function addNodeInteractions(node) {
     node.on("mouseover", function(event, d) {
-        const circle = d3.select(this).select("circle");
-        const currentColor = circle.attr("fill");
-        
-        circle.transition()
-            .duration(200)
-            .attr("r", 6)
-            .attr("fill", d3.color(currentColor).darker(0.2));
+        // 如果节点正在被拖动，不执行hover效果
+        if (!d3.select(this).classed("dragging")) {
+            const circle = d3.select(this).select("circle");
+            const currentColor = circle.attr("fill");
             
-        d3.select(this).select(".node-label")
-            .transition()
-            .duration(200)
-            .style("font-size", `${CONFIG.fontSize * 1.2}px`);  // hover时增大20%
+            circle.transition()
+                .duration(200)
+                .attr("r", 6)
+                .attr("fill", d3.color(currentColor).darker(0.2));
+                
+            d3.select(this).select(".node-label")
+                .transition()
+                .duration(200)
+                .style("font-size", `${CONFIG.fontSize * 1.2}px`);
+        }
     })
     .on("mouseout", function(event, d) {
-        const circle = d3.select(this).select("circle");
-        const currentColor = circle.attr("fill");
-        
-        circle.transition()
-            .duration(200)
-            .attr("r", 4)
-            .attr("fill", currentColor);
+        // 如果节点正在被拖动，不执行hover效果
+        if (!d3.select(this).classed("dragging")) {
+            const circle = d3.select(this).select("circle");
+            const currentColor = circle.attr("fill");
             
-        d3.select(this).select(".node-label")
-            .transition()
-            .duration(200)
-            .style("font-size", `${CONFIG.fontSize}px`);  // 恢复原始大小
+            circle.transition()
+                .duration(200)
+                .attr("r", 4)
+                .attr("fill", currentColor);
+                
+            d3.select(this).select(".node-label")
+                .transition()
+                .duration(200)
+                .style("font-size", `${CONFIG.fontSize}px`);
+        }
     });
+    
+    // 注意：不需要在这里添加拖动事件，因为已经在createTree中通过.call(drag)添加了
 }

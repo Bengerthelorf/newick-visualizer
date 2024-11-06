@@ -47,9 +47,6 @@ body {
 }
 
 /* 节点标签样式 */
-/* .node-label {
-} */
-
 .node-label.direction-right {
     text-anchor: start;
     dominant-baseline: middle;
@@ -70,8 +67,30 @@ body {
     dominant-baseline: alphabetic;
 }
 
-/* 可信度值样式 - 只有在showConfidence=true时才显示 */
+/* 可信度值样式 */
 .confidence-value {
     font-size: 10px;
     fill: #666;
+}
+
+/* 拖动相关样式 */
+g.dragging circle {
+    fill: #ff4444;
+    r: 6;
+}
+
+g.dragging .node-label {
+    font-weight: bold;
+}
+
+/* 鼠标样式 */
+g:hover circle {
+    cursor: move;
+}
+
+/* 过渡动画 */
+g circle,
+g .node-label,
+path {
+    transition: all 0.2s ease-in-out;
 }

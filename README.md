@@ -2,6 +2,17 @@
 
 A tool for creating interactive visualizations of phylogenetic trees in Newick format.
 
+## Features
+
+- Interactive visualization of phylogenetic trees
+- Support for multiple layout directions (right, left, up, down)
+- Configurable node and branch styling
+- Custom grouping and coloring of nodes
+- Draggable nodes for manual layout adjustments
+- Automatic confidence value display
+- Interactive hover effects
+- Customizable connecting lines
+
 ## Installation
 
 You can install newick-visualizer using pip:
@@ -24,6 +35,8 @@ With options:
 newick-viz input.nwk groups.json \
     --output output.html \
     --font-size 14 \
+    --link-color "#336699" \
+    --link-width 2.0 \
     --show-confidence
 ```
 
@@ -37,14 +50,23 @@ newick-viz input.nwk groups.json \
 - `--font-family`: Font family for labels [default: Arial, sans-serif]
 - `--font-weight`: Font weight [default: normal]
 - `--show-confidence`: Show confidence values
-- `--link-color`: Color of the connecting lines [default: #999999]
-- `--link-width`: Width of the connecting lines [default: 1.5]
+- `--link-color`: Color of connecting lines [default: #999999]
+- `--link-width`: Width of connecting lines in pixels [default: 1.5]
 
-For a complete list of options:
+### Interactive Features
 
-```bash
-newick-viz --help
-```
+#### Node Dragging
+
+- Click and drag any node to manually adjust its position
+- Connected lines and group backgrounds will update automatically
+- Visual feedback during dragging (node highlight and size change)
+- Changes persist in the visualization
+
+#### Hover Effects
+
+- Nodes enlarge slightly on hover
+- Labels become more prominent
+- Smooth transitions for all visual changes
 
 ## Input Files
 
@@ -91,10 +113,42 @@ cd newick-visualizer
 pip install -e .
 ```
 
-## License
+### Project Structure
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+```bash
+.
+├── _version.py
+├── LICENSE
+├── MANIFEST.in
+├── newick_visualizer/
+│   ├── __init__.py
+│   ├── core/
+│   │   ├── tree_generator.py
+│   │   ├── template_manager.py
+│   │   └── utils.py
+│   └── templates/
+│       ├── base.html
+│       ├── scripts/
+│       │   ├── tree.js
+│       │   ├── layout.js
+│       │   ├── groups.js
+│       │   └── main.js
+│       └── styles/
+│           └── main.css
+├── README.md
+└── setup.py
+```
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
