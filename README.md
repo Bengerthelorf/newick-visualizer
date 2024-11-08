@@ -1,5 +1,7 @@
 # Newick Tree Visualizer
 
+[![PyPI version](https://badge.fury.io/py/newick-visualizer.svg)](https://badge.fury.io/py/newick-visualizer) [![PyPI Downloads](https://img.shields.io/pypi/dm/newick-visualizer)](https://pypi.org/project/newick-visualizer) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A tool for creating interactive visualizations of phylogenetic trees in Newick format.
 
 ## ✨ Features
