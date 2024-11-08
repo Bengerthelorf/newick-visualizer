@@ -6,6 +6,18 @@ version = {}
 with open(os.path.join("newick_visualizer", "_version.py")) as fp:
     exec(fp.read(), version)
 
+# 读取 README.md
+with open('README.md', 'r', encoding='utf-8') as f:
+    long_description = f.read()
+
+# 添加 GitHub 信息
+project_urls = {
+    'Source': 'https://github.com/Bengerthelorf/newick-visualizer',
+    'Star Me': 'https://github.com/Bengerthelorf/newick-visualizer/stargazers',
+    'Bug Reports': 'https://github.com/Bengerthelorf/newick-visualizer/issues',
+    'Documentation': 'https://newick-visualizer.readthedocs.io/',
+}
+
 setup(
     name="newick-visualizer",
     version=version["__version__"],
@@ -37,9 +49,13 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Bengerthelorf/newick-visualizer",
     classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Science/Research",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
+        "Topic :: Scientific/Engineering :: Visualization",
     ],
     python_requires='>=3.6',
 )

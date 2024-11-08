@@ -4,6 +4,12 @@
 
 A tool for creating interactive visualizations of phylogenetic trees in Newick format.
 
+## ⭐ Support the Project
+
+If you find this project helpful, please consider giving it a star on GitHub! It helps make the project more visible and encourages further development.
+
+[![Star on GitHub](https://img.shields.io/github/stars/Bengerthelorf/newick-visualizer.svg?style=social)](https://github.com/Bengerthelorf/newick-visualizer/stargazers)
+
 ## ✨ Features
 
 - 🌳 Interactive visualization of phylogenetic trees
