@@ -215,6 +215,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
+If you have any suggestions or feedback, please submit them on our [GitHub Issues page](https://github.com/Bengerthelorf/newick-visualizer/issues).
+
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
