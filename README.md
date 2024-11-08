@@ -217,7 +217,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 If you have any suggestions or feedback, please submit them on our [GitHub Issues page](https://github.com/Bengerthelorf/newick-visualizer/issues).
 
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
