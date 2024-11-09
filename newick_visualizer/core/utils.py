@@ -159,20 +159,26 @@ def validate_file_path(file_path: str, should_exist: bool = True) -> str:
     Raises:
         ValueError: 如果路径无效
     """
-    path = Path(file_path)
-    
-    if should_exist and not path.exists():
-        raise ValueError(f"File does not exist: {file_path}")
+    try:
+        # 规范化路径，处理跨平台差异
+        path = Path(file_path).resolve()
         
-    if not should_exist:
-        # 检查父目录是否存在且可写
-        parent = path.parent
-        if not parent.exists():
-            raise ValueError(f"Directory does not exist: {parent}")
-        if not os.access(parent, os.W_OK):
-            raise ValueError(f"Directory is not writable: {parent}")
-    
-    return str(path)
+        if should_exist and not path.exists():
+            raise ValueError(f"File does not exist: {path}")
+            
+        if not should_exist:
+            # 检查父目录是否存在且可写
+            parent = path.parent
+            if not parent.exists():
+                raise ValueError(f"Directory does not exist: {parent}")
+            if not os.access(str(parent), os.W_OK):  # 使用 str() 确保 Windows 兼容性
+                raise ValueError(f"Directory is not writable: {parent}")
+        
+        return str(path)  # 返回规范化的路径字符串
+        
+    except Exception as e:
+        # 提供更详细的错误信息
+        raise ValueError(f"Invalid file path '{file_path}': {str(e)}")
 
 def ensure_directory_exists(directory: Union[str, Path]) -> None:
     """确保目录存在，如果不存在则创建
